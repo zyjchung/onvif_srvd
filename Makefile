@@ -33,6 +33,7 @@ CXXFLAGS         += -DDAEMON_PID_FILE_NAME='"$(DAEMON_PID_FILE_NAME)"'
 CXXFLAGS         += -DDAEMON_LOG_FILE_NAME='"$(DAEMON_LOG_FILE_NAME)"'
 CXXFLAGS         += -DDAEMON_NO_CHDIR=$(DAEMON_NO_CHDIR)
 CXXFLAGS         += -DDAEMON_NO_CLOSE_STDIO=$(DAEMON_NO_CLOSE_STDIO)
+CXXFLAGS         += -DWITH_OPENSSL -lssl -lcrypto -lz
 
 CXXFLAGS         += -I$(COMMON_DIR)
 CXXFLAGS         += -I$(GENERATED_DIR)
@@ -49,8 +50,7 @@ CXX              ?= g++
 # call make with the WSSE_ON=1 parameter
 # example:
 # make WSSE_ON=1 all
-ifdef WSSE_ON
-CXXFLAGS        += -DWITH_OPENSSL -lssl -lcrypto -lz
+#ifdef WSSE_ON
 
 WSSE_SOURCES     = $(GSOAP_PLUGIN_DIR)/wsseapi.c \
                    $(GSOAP_PLUGIN_DIR)/mecevp.c  \
@@ -58,9 +58,9 @@ WSSE_SOURCES     = $(GSOAP_PLUGIN_DIR)/wsseapi.c \
                    $(GSOAP_PLUGIN_DIR)/wsaapi.c
 
 WSSE_IMPORT      = echo '\#import "wsse.h" ' >> $@
-else
-GSOAP_CONFIGURE += --disable-ssl
-endif
+#else
+#GSOAP_CONFIGURE += --disable-ssl
+#endif
 
 
 
@@ -70,7 +70,8 @@ endif
 
 SOAP_SRC = $(GSOAP_DIR)/stdsoap2.cpp        \
            $(GSOAP_DIR)/dom.cpp             \
-           $(GSOAP_CUSTOM_DIR)/duration.c
+           $(GSOAP_CUSTOM_DIR)/duration.c   \
+           $(GSOAP_CUSTOM_DIR)/struct_timeval.c
 
 
 
